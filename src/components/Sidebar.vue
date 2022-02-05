@@ -1,5 +1,6 @@
 <template>
   <div id="sidebar">
+    <Avatar/>
     <div class="icons">
       <router-link to="/note/1" title="笔记">
         <i class="iconfont icon-note"/>
@@ -18,8 +19,10 @@
 </template>
 
 <script>
+import Avatar from '@/components/Avatar';
 export default {
   name: 'Sidebar',
+  components: {Avatar},
   methods: {
     onLogout() {
       console.log('logout logout');
