@@ -30,6 +30,7 @@ span {
   text-transform: uppercase;
   font-size: 18px;
   margin-top: 15px;
+  cursor: pointer;
 }
 
 
