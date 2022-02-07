@@ -57,8 +57,7 @@
 import Button from '@/components/Button';
 import request from '@/helpers/request';
 
-request('/auth/login', 'POST', {username: 'hunger', password: '123456'})
-  .then(data => console.log(data));
+request('/auth').then(data => console.log(data));
 
 export default {
   name: 'Login',
@@ -104,9 +103,15 @@ export default {
       } else {
         alert('用户名或密码不能为空');
       }
+      request('/auth/register', 'POST',
+        {username: this.register.username, password: this.register.password})
+        .then(data => console.log(data));
+
     },
     onLogin() {
-      console.log('login...');
+      request('/auth/login', 'POST',
+        {username: this.login.username, password: this.login.password})
+        .then(data => console.log(data));
     },
   },
 

@@ -20,6 +20,7 @@
 
 <script>
 import Avatar from '@/components/Avatar';
+import request from '@/helpers/request';
 
 export default {
   name: 'Sidebar',
@@ -27,6 +28,7 @@ export default {
   methods: {
     onLogout() {
       console.log('logout logout');
+      request('/auth/logout').then(data => console.log(data));
     }
   }
 };
@@ -59,6 +61,7 @@ export default {
     width: 100%;
     text-align: center;
     cursor: pointer;
+    padding: 6px 0;
   }
 
   .iconfont {
