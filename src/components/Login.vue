@@ -55,6 +55,10 @@
 
 <script>
 import Button from '@/components/Button';
+import request from '@/helpers/request';
+
+request('/auth/login', 'POST', {username: 'hunger', password: '123456'})
+  .then(data => console.log(data));
 
 export default {
   name: 'Login',
@@ -94,11 +98,11 @@ export default {
     },
     onRegister() {
       if (this.register.username && this.register.password) {
-        if(!(this.usernameIsError || this.passwordIsError)) {
+        if (!(this.usernameIsError || this.passwordIsError)) {
           console.log(`start register..., username: ${this.register.username}, password: ${this.register.password}`);
         }
       } else {
-        alert('用户名或密码不能为空')
+        alert('用户名或密码不能为空');
       }
     },
     onLogin() {
