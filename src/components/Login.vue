@@ -4,11 +4,13 @@
       <div class="modal-wrapper">
         <div class="modal-container">
           <div class="form">
-            <div class="logo"><h1>evernote</h1></div>
+            <div class="logo">
+              <img src="../assets/hugsy.png" alt="">
+            </div>
 
             <div v-show="registerVisible" class="register">
               <h3>用户名</h3>
-              <input type="text" placeholder="至少为 3 位字符"
+              <input type="text" placeholder="支持字母、数字、下划线、汉字"
                      @input="validateUsername(register.username)"
                      v-model="register.username">
               <h3>密码</h3>
@@ -68,7 +70,7 @@ export default {
       loginVisible: false,
       usernameIsError: false,
       passwordIsError: false,
-      usernameMsg: '用户名长度为 3~15 位字符，支持字母、数字、下划线、中文',
+      usernameMsg: '用户名长度为 3~15 位字符，支持字母、数字、下划线、汉字',
       passwordMsg: '密码长度需为 6~16 位字符',
       register: {
         username: '',
@@ -158,6 +160,10 @@ export default {
 
     .logo {
       margin-bottom: 56px;
+
+      > img {
+        height: 52px;
+      }
     }
 
     .register, .login {
