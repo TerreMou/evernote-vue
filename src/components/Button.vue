@@ -26,7 +26,6 @@ export default {
 
 .hugsy-button {
   font-size: 16px;
-  font-weight: bold;
   border: 1px solid @default;
   border-radius: 1.5rem;
   box-sizing: border-box;
@@ -62,6 +61,8 @@ export default {
   }
 
   &.text {
+    padding: 10px 2px;
+    font-weight: normal;
     border-color: transparent;
     background: transparent;
     box-shadow: none;

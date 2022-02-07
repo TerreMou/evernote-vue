@@ -1,30 +1,51 @@
 <template>
   <div id="login">
-    <h1>{{ msg }}</h1>
     <div class="modal-mask">
       <div class="modal-wrapper">
         <div class="modal-container">
           <div class="form">
             <div class="logo"><h1>evernote</h1></div>
-            <div v-show="true" class="register">
+
+            <div v-show="registerVisible" class="register">
               <h3>用户名</h3>
-              <input type="text">
+              <input type="text" placeholder="至少为 3 位字符"
+                     @input="validateUsername(register.username)"
+                     v-model="register.username">
               <h3>密码</h3>
-              <input type="password">
+              <input type="password" placeholder="至少为 6 位字符"
+                     @input="validatePassword(register.password)"
+                     v-model="register.password">
+              <p v-show="usernameIsError">{{ usernameMsg }}</p>
+              <p v-show="passwordIsError">{{ passwordMsg }}</p>
               <div class="buttons">
-                <Button theme="text">登录</Button>
-                <Button>创建账号</Button>
+                <div class="buttons-text">
+                  <span>已经拥有账户？</span>
+                  <Button @click.native="showLogin" theme="text">登录</Button>
+                </div>
+                <Button @click.native="onRegister">创建账户</Button>
               </div>
             </div>
-            <div v-show="false" class="login">
+
+            <div v-show="loginVisible" class="login">
               <h3>用户名</h3>
-              <input type="text">
+              <input type="text"
+                     @input="validateUsername(login.username)"
+                     v-model="login.username">
               <h3>密码</h3>
-              <input type="password">
+              <input type="password"
+                     @input="validatePassword(login.password)"
+                     v-model="login.password">
+              <p v-show="usernameIsError">{{ usernameMsg }}</p>
+              <p v-show="passwordIsError">{{ passwordMsg }}</p>
               <div class="buttons">
-                <Button>登录</Button>
+                <div class="buttons-text">
+                  <span>没有账户？</span>
+                  <Button @click.native="showRegister" theme="text">创建账户</Button>
+                </div>
+                <Button @click.native="onLogin">登录</Button>
               </div>
             </div>
+
           </div>
         </div>
       </div>
@@ -40,9 +61,52 @@ export default {
   components: {Button},
   data() {
     return {
-      msg: 'This is login page'
+      registerVisible: true,
+      loginVisible: false,
+      usernameIsError: false,
+      passwordIsError: false,
+      usernameMsg: '用户名长度为 3~15 位字符，支持字母、数字、下划线、中文',
+      passwordMsg: '密码长度需为 6~16 位字符',
+      register: {
+        username: '',
+        password: '',
+      },
+      login: {
+        username: '',
+        password: '',
+      },
     };
-  }
+  },
+  methods: {
+    showLogin() {
+      this.registerVisible = false;
+      this.loginVisible = true;
+    },
+    showRegister() {
+      this.registerVisible = true;
+      this.loginVisible = false;
+    },
+    validateUsername(username) {
+      this.usernameIsError = !/^[\w\u4e00-\u9fa5]{3,15}$/.test(username);
+    },
+    validatePassword(password) {
+      this.passwordIsError = !/^.{6,16}$/.test(password);
+    },
+    onRegister() {
+      if (this.register.username && this.register.password) {
+        if(!(this.usernameIsError || this.passwordIsError)) {
+          console.log(`start register..., username: ${this.register.username}, password: ${this.register.password}`);
+        }
+      } else {
+        alert('用户名或密码不能为空')
+      }
+    },
+    onLogin() {
+      console.log('login...');
+    },
+  },
+
+
 };
 </script>
 
@@ -112,21 +176,20 @@ export default {
       input:focus {
         border: 1px solid rgba(0, 0, 0, .5);
       }
-    }
 
-    .register {
       .buttons {
         display: flex;
         justify-content: space-between;
         margin: 32px 0 16px 0;
-      }
-    }
 
-    .login {
-      .buttons {
-        display: flex;
-        justify-content: flex-end;
-        margin: 32px 0 16px 0;
+        &-text {
+          display: flex;
+          align-items: center;
+        }
+      }
+
+      p {
+        color: #ff356a;
       }
     }
   }
