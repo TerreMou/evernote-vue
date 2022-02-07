@@ -20,7 +20,7 @@
 
 <script>
 import Avatar from '@/components/Avatar';
-import request from '@/helpers/request';
+import Auth from '@/apis/auth';
 
 export default {
   name: 'Sidebar',
@@ -28,7 +28,7 @@ export default {
   methods: {
     onLogout() {
       console.log('logout logout');
-      request('/auth/logout').then(data => console.log(data));
+      Auth.logout().then(data => console.log(data));
     }
   }
 };
