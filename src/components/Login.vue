@@ -108,7 +108,6 @@ export default {
         password: this.register.password
       }).then(data => {
         this.register.isError = false;
-        console.log(data);
         this.$router.push({path: 'notebooks'});
       }).catch(data => {
         this.register.isError = true;
@@ -121,7 +120,6 @@ export default {
         password: this.login.password
       }).then(data => {
           this.login.isError = false;
-          console.log(data);
           this.$router.push({path: 'notebooks'});
         }
       ).catch(data => {
