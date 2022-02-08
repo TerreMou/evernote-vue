@@ -11,7 +11,7 @@
       <router-link to="/trash/2" title="回收站">
         <i class="iconfont icon-trash"/>
       </router-link>
-      <div class="logout" @click="onLogout">
+      <div class="logout" @click="onLogout" title="退出登录">
         <i class="iconfont icon-logout"/>
       </div>
     </div>

@@ -36,7 +36,7 @@ export default {
 };
 </script>
 
-<style scoped>
+<style lang="less" scoped>
 span {
   display: inline-block;
   width: 30px;
@@ -44,7 +44,7 @@ span {
   text-align: center;
   line-height: 32px;
   border-radius: 50%;
-  background: #f2b81c;
+  background: #fb80a7;
   color: #fff;
   text-shadow: 1px 0 1px #795c19;
   font-weight: bold;

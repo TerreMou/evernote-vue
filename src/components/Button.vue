@@ -1,5 +1,5 @@
 <template>
-  <button class="hugsy-button" :class="theme">
+  <button class="hugsy-button" :class="classes">
     <slot/>
   </button>
 </template>
@@ -10,8 +10,20 @@ export default {
     theme: {
       type: String,
       default: 'default'
+    },
+    size: {
+      type: String,
+      default: "default"
     }
   },
+  computed: {
+    classes() {
+      return {
+        [`${this.theme}`]: this.theme,
+        [`${this.size}`]: this.size,
+      }
+    }
+  }
 };
 </script>
 
@@ -79,6 +91,13 @@ export default {
       background: @default;
     }
   }
+
+  &.small {
+    font-size: 12px;
+    height: 24px;
+    padding: 8px 16px;
+  }
+
 }
 
 </style>

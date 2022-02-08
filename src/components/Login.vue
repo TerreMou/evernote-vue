@@ -15,6 +15,7 @@
                      v-model="register.username">
               <h3>密码</h3>
               <input type="password" placeholder="至少为 6 位字符"
+                     @keyup.enter="onRegister"
                      @input="validatePassword(register.password)"
                      v-model="register.password">
               <p v-show="usernameIsError">{{ usernameMsg }}</p>
@@ -36,6 +37,7 @@
                      v-model="login.username">
               <h3>密码</h3>
               <input type="password"
+                     @keyup.enter="onLogin"
                      @input="validatePassword(login.password)"
                      v-model="login.password">
               <p v-show="usernameIsError">{{ usernameMsg }}</p>
@@ -89,6 +91,9 @@ export default {
     };
   },
   methods: {
+    submit() {
+
+    },
     showLogin() {
       this.registerVisible = false;
       this.loginVisible = true;
