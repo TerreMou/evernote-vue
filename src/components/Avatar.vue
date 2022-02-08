@@ -3,7 +3,8 @@
 </template>
 
 <script>
-import Auth from '../apis/auth';
+import Auth from '@/apis/auth';
+import Bus from '@/helpers/bus';
 
 export default {
   data() {
@@ -13,6 +14,9 @@ export default {
   },
 
   created() {
+    Bus.$on('update:userInfo', userInfo => {
+      this.username = userInfo.username;
+    });
     Auth.getInfo()
       .then(res => {
         /** @namespace res.isLogin **/

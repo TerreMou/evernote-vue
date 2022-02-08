@@ -59,6 +59,7 @@
 <script>
 import Button from '@/components/Button';
 import Auth from '@/apis/auth';
+import Bus from '@/helpers/bus';
 
 Auth.getInfo().then(data => console.log(data));
 
@@ -106,8 +107,9 @@ export default {
       Auth.register({
         username: this.register.username,
         password: this.register.password
-      }).then(data => {
+      }).then(() => {
         this.register.isError = false;
+        Bus.$emit('update:userInfo', {username: this.register.username});
         this.$router.push({path: 'notebooks'});
       }).catch(data => {
         this.register.isError = true;
@@ -118,8 +120,9 @@ export default {
       Auth.login({
         username: this.login.username,
         password: this.login.password
-      }).then(data => {
+      }).then(() => {
           this.login.isError = false;
+          Bus.$emit('update:userInfo', {username: this.login.username});
           this.$router.push({path: 'notebooks'});
         }
       ).catch(data => {
