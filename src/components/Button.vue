@@ -95,7 +95,6 @@ export default {
   &.small {
     font-size: 12px;
     height: 24px;
-    padding: 8px 16px;
   }
 
 }

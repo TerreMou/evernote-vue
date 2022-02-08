@@ -91,9 +91,6 @@ export default {
     };
   },
   methods: {
-    submit() {
-
-    },
     showLogin() {
       this.registerVisible = false;
       this.loginVisible = true;

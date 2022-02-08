@@ -37,21 +37,22 @@ export default {
 </script>
 
 <style lang="less" scoped>
-@bg: #2c333c;
+// #2c333c
+@bg: #aec4d1;
 @font: #fff;
-@active: #5e6266;
+@active: darken(#aec4d1,6%);
 
 #sidebar {
   position: relative;
-  width: 56px;
+  width: 64px;
   text-align: center;
-  background-color: @bg;
+  background: @bg;
 
   .icons {
     margin-top: 15px;
 
     a {
-      padding: 6px 0;
+      padding: 10px 0;
       display: block;
     }
 
