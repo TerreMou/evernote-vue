@@ -50,7 +50,7 @@
         display: flex;
         justify-content: space-between;
         align-items: center;
-        padding: 12px 14px;
+        padding-left: 14px;
         text-align: center;
         border-bottom: 1px solid #ebebeb;
 
@@ -60,6 +60,7 @@
         }
 
         .title {
+          padding: 12px 0;
           .iconfont {
             color: #2c333c; // #f94f85
             margin-right: 8px;
@@ -68,10 +69,12 @@
 
         .actions {
           span {
-            margin: 0 4px;
+            padding: 12px 4px;
+            &:last-child {
+              padding-right: 14px;
+            }
           }
         }
-
       }
 
       .item:hover {
