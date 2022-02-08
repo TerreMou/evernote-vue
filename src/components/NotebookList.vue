@@ -44,7 +44,10 @@
 
 <script>
 import Auth from '@/apis/auth';
+import Notebook from '@/apis/notebookApis';
 import Button from '@/components/Button';
+
+window.notebook = Notebook
 
 export default {
   name: 'NotebookList',
