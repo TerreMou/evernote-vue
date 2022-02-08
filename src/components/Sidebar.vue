@@ -29,7 +29,7 @@ export default {
     onLogout() {
       Auth.logout().then(data => {
         console.log(data);
-        this.$router.push({path: 'login'});
+        this.$router.push({path: '/login'});
       });
     }
   }
@@ -37,11 +37,15 @@ export default {
 </script>
 
 <style lang="less" scoped>
+@bg: #2c333c;
+@font: #fff;
+@active: #5e6266;
+
 #sidebar {
   position: relative;
   width: 56px;
   text-align: center;
-  background-color: #2c333c;
+  background-color: @bg;
 
   .icons {
     margin-top: 15px;
@@ -52,7 +56,7 @@ export default {
     }
 
     .router-link-active {
-      background-color: #5e6266;
+      background-color: @active;
     }
 
   }
@@ -67,7 +71,7 @@ export default {
   }
 
   .iconfont {
-    color: #fff;
+    color: @font;
   }
 
 }

@@ -110,7 +110,7 @@ export default {
       }).then(() => {
         this.register.isError = false;
         Bus.$emit('update:userInfo', {username: this.register.username});
-        this.$router.push({path: 'notebooks'});
+        this.$router.push({path: '/notebooks'});
       }).catch(data => {
         this.register.isError = true;
         this.register.notice = data.msg;
@@ -123,7 +123,7 @@ export default {
       }).then(() => {
           this.login.isError = false;
           Bus.$emit('update:userInfo', {username: this.login.username});
-          this.$router.push({path: 'notebooks'});
+          this.$router.push({path: '/notebooks'});
         }
       ).catch(data => {
         this.login.isError = true;
