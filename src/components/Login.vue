@@ -19,6 +19,7 @@
                      v-model="register.password">
               <p v-show="usernameIsError">{{ usernameMsg }}</p>
               <p v-show="passwordIsError">{{ passwordMsg }}</p>
+              <p v-show="register.isError">{{ register.notice }}</p>
               <div class="buttons">
                 <div class="buttons-text">
                   <span>已经拥有账户？</span>
@@ -38,7 +39,7 @@
                      @input="validatePassword(login.password)"
                      v-model="login.password">
               <p v-show="usernameIsError">{{ usernameMsg }}</p>
-              <p v-show="passwordIsError">{{ passwordMsg }}</p>
+              <p v-show="login.isError">{{ login.notice }}</p>
               <div class="buttons">
                 <div class="buttons-text">
                   <span>没有账户？</span>
@@ -66,19 +67,23 @@ export default {
   components: {Button},
   data() {
     return {
-      registerVisible: true,
-      loginVisible: false,
+      registerVisible: false,
+      loginVisible: true,
       usernameIsError: false,
       passwordIsError: false,
-      usernameMsg: '用户名长度为 3~15 位字符，支持字母、数字、下划线、汉字',
+      usernameMsg: '用户名长度为 1~15 位字符，支持字母、数字、下划线、汉字',
       passwordMsg: '密码长度需为 6~16 位字符',
       register: {
         username: '',
         password: '',
+        isError: false,
+        notice: '',
       },
       login: {
         username: '',
         password: '',
+        isError: false,
+        notice: '',
       },
     };
   },
@@ -98,27 +103,33 @@ export default {
       this.passwordIsError = !/^.{6,16}$/.test(password);
     },
     onRegister() {
-      if (this.register.username && this.register.password) {
-        if (!(this.usernameIsError || this.passwordIsError)) {
-          console.log(`start register..., username: ${this.register.username}, password: ${this.register.password}`);
-        }
-      } else {
-        alert('用户名或密码不能为空');
-      }
       Auth.register({
         username: this.register.username,
         password: this.register.password
-      }).then(data => console.log(data));
+      }).then(data => {
+        this.register.isError = false;
+        console.log(data);
+        this.$router.push({path: 'notebooks'});
+      }).catch(data => {
+        this.register.isError = true;
+        this.register.notice = data.msg;
+      });
     },
     onLogin() {
       Auth.login({
         username: this.login.username,
         password: this.login.password
-      }).then(data => console.log(data));
+      }).then(data => {
+          this.login.isError = false;
+          console.log(data);
+          this.$router.push({path: 'notebooks'});
+        }
+      ).catch(data => {
+        this.login.isError = true;
+        this.login.notice = data.msg;
+      });
     },
   },
-
-
 };
 </script>
 
