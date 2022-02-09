@@ -13,7 +13,7 @@
         </main>
         <footer>
           <Button theme="link" @click.native="close">取消</Button>
-          <Button @click.native="onOk">确认</Button>
+          <Button @click.native="onOk">{{ buttonConfirm }}</Button>
         </footer>
       </div>
     </div>
@@ -35,6 +35,7 @@ export default {
       default: true
     },
     ok: Function,
+    buttonConfirm: String,
   },
 
   methods: {
