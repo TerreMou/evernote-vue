@@ -45,7 +45,7 @@
       <div class="layout">
         <h3>笔记本列表({{ notebooks.length }})</h3>
         <div class="list">
-          <router-link to="/note/1" class="item"
+          <router-link :to="`/note?notebookId=${notebook.id}`" class="item"
                        v-for="notebook in notebooks" :key="notebook.id">
             <div class="title">
               <span class="iconfont icon-notebook"/>{{ notebook.title }}
@@ -53,8 +53,8 @@
             </div>
             <div class="actions" @click.stop.prevent>
               <span>{{ notebook.dateDisplay }}</span>
-              <span @click="showEditDialog(notebook)">编辑</span>
-              <span @click="showDeleteDialog(notebook)">删除</span>
+              <span class="edit" @click="showEditDialog(notebook)">编辑</span>
+              <span class="delete" @click="showDeleteDialog(notebook)">删除</span>
             </div>
           </router-link>
         </div>
