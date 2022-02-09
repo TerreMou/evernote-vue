@@ -2,9 +2,20 @@
   <div id="notebook-list">
     <header>
       <h2>笔记本</h2>
-      <Button size="small" theme="text" @click.native="onCreate">
+      <Button size="small" theme="text" @click.native="showDialog">
         <i class="iconfont icon-plus"/>新建笔记本
       </Button>
+      <Dialog :visible="bool" @update:visible="bool=$event"
+              :ok="onCreate"
+              :closeOnClickOverlay="false">
+        <template v-slot:title>
+          <p>创建笔记本</p>
+        </template>
+        <template v-slot:content>
+          <p>请输入新笔记本标题</p>
+          <input v-model="nbTitle" type="text">
+        </template>
+      </Dialog>
     </header>
     <main>
       <div class="layout">
@@ -32,16 +43,19 @@
 import Auth from '@/apis/auth';
 import Notebook from '@/apis/notebookApis';
 import Button from '@/components/Button';
+import Dialog from '@/components/Dialog';
 
 /** @namespace notebook.noteCounts **/
 /** @namespace notebook.createdAt **/
 
 export default {
   name: 'NotebookList',
-  components: {Button},
+  components: {Dialog, Button},
   data() {
     return {
+      bool: false,
       notebooks: [],
+      nbTitle:'',
     };
   },
 
@@ -57,19 +71,25 @@ export default {
   },
 
   methods: {
+    showDialog() {
+      this.bool = !this.bool
+    },
+
     onCreate() {
-      const title = window.prompt('创建笔记本');
-      if (title === null) {
+      if (this.nbTitle === null) {
         return;
       }
-      if (title.trim() === '') {
-        return alert('笔记本名不能为空');
+      if (this.nbTitle.trim() === '') {
+        alert('笔记本名不能为空')
+        this.nbTitle = ''
+        return
       }
-      Notebook.addNotebook({title}).then(res => {
+      Notebook.addNotebook({title: this.nbTitle}).then(res => {
         console.log(res);
         this.notebooks.unshift(res.data);
         alert(res.msg);
-      });
+      }).catch(err=>alert(err.msg))
+      this.nbTitle = ''
     },
     onEdit(notebook) {
       const title = window.prompt('修改笔记本名', notebook.title);

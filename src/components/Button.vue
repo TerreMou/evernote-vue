@@ -72,6 +72,16 @@ export default {
     border: 0;
   }
 
+  &.link {
+    border-color: transparent;
+    background: transparent;
+    box-shadow: none;
+    color: @default;
+    &:hover, &:focus {
+      background: darken(white, 10%);
+    }
+  }
+
   &.text {
     padding: 10px 2px;
     font-weight: normal;
