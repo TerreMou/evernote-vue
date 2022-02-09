@@ -5,7 +5,7 @@
       <Button size="small" theme="text" @click.native="showCreateDialog">
         <i class="iconfont icon-plus"/>新建笔记本
       </Button>
-      <Dialog :visible="bool1" @update:visible="bool1 = $event"
+      <Dialog :visible="bool1" @update:visible="bool1=$event"
               buttonConfirm="确定"
               :ok="onCreate"
               :closeOnClickOverlay="false">
@@ -117,31 +117,30 @@ export default {
         return;
       }
       if (this.nbTitle.trim() === '') {
-        alert('笔记本名不能为空');
+        this.$message.error('笔记本名不能为空');
         this.nbTitle = '';
         return;
       }
       Notebook.addNotebook({title: this.nbTitle}).then(res => {
         this.notebooks.unshift(res.data);
-        alert(res.msg);
-      }).catch(err => alert(err.msg));
+        this.$message.success(res.msg)
+      }).catch(err => this.$message.error(err.msg));
       this.nbTitle = '';
     },
     onEdit() {
       Notebook.updateNotebook(this.nb.id, {title: this.nbTitleEdit}).then(res => {
         this.nb.title = this.nbTitleEdit;
-        alert(res.msg);
-      }).catch(err => alert(err.msg));
+        this.$message.success(res.msg);
+      }).catch(err => this.$message.error(err.msg));
     },
     onDelete() {
       Notebook.deleteNotebook(this.nb.id).then(res => {
         const index = this.notebooks.indexOf(this.nb);
         this.notebooks.splice(index, 1);
-        alert(res.msg);
+        this.$message.success(res.msg);
       });
     }
   },
-
 };
 </script>
 
