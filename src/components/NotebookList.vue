@@ -17,7 +17,7 @@
               <span>{{ notebook.noteCounts }}</span>
             </div>
             <div class="actions" @click.stop.prevent>
-              <span>{{ notebook.createdAt }}</span>
+              <span>{{ notebook.dateDisplay }}</span>
               <span @click="onEdit(notebook)">编辑</span>
               <span @click="onDelete(notebook)">删除</span>
             </div>

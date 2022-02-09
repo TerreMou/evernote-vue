@@ -1,4 +1,5 @@
 import request from '@/helpers/request';
+import {beautifyDate} from '@/helpers/beautifyDate';
 
 const URL = {
   GET: '/notebooks',
@@ -9,7 +10,15 @@ const URL = {
 
 export default {
   getNotebookList() {
-    return request(URL.GET)
+    return new Promise((resolve, reject) => {
+      request(URL.GET).then(res => {
+        res.data.sort((a, b) => a.createdAt < b.createdAt ? 1 : -1);
+        res.data.forEach(notebook => {
+          notebook.dateDisplay = beautifyDate(notebook.createdAt);
+        });
+        resolve(res);
+      }).catch(err => reject(err));
+    });
   },
 
   updateNotebook(notebookId, {title = ''} = {title: ''}) {
@@ -21,7 +30,12 @@ export default {
   },
 
   addNotebook({title = ''} = {title: ''}) {
-    return request(URL.ADD, 'POST', {title});
+    return new Promise((resolve, reject) => {
+      request(URL.ADD, 'POST', {title}).then(res => {
+        res.data.dateDisplay = beautifyDate(res.data.createdAt);
+        resolve(res);
+      }).catch(err => reject(err));
+    });
   }
 
 };
