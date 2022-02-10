@@ -1,6 +1,6 @@
 <template>
   <div id="note">
-    <NoteSidebar/>
+    <NoteSidebar @update:notes="notes=$event" />
     <div class="note-detail">
       <div class="unselected" v-show="!currentNote.id">请选择笔记</div>
 
@@ -17,10 +17,10 @@
         </header>
         <main>
           <section class="note-title">
-            <input type="text" :value="currentNote.title" placeholder="请输入标题">
+            <input type="text" v-model="currentNote.title" placeholder="请输入标题">
           </section>
           <section class="editor">
-            <textarea v-show="true" :value="currentNote.content" placeholder="请输入内容，支持 markdown 语法" />
+            <textarea v-show="true" v-model="currentNote.content" placeholder="请输入内容，支持 markdown 语法" />
             <div class="preview markdown-body" v-show="false"/>
           </section>
         </main>
@@ -40,14 +40,8 @@ export default {
   components: {NoteSidebar},
   data() {
     return {
-      currentNote: {
-        createdAtDisplay: '1 天前',
-        updatedAtDisplay: '刚刚',
-        title: '',
-        content: '',
-        id: 132,
-
-      }
+      currentNote: {},
+      notes:[],
     };
   },
   created() {
@@ -57,6 +51,11 @@ export default {
       }
     });
   },
+  beforeRouteUpdate(to, from, next) {
+    this.currentNote = this.notes.find(note=>note.id === to.query.noteId-0) || {}
+    next()
+  },
+
 };
 </script>
 

@@ -58,6 +58,7 @@ export default {
       return Note.getAllNote({notebookId: this.currentBook.id});
     }).then(res => {
       this.notes = res.data;
+      this.$emit('update:notes', this.notes)
     });
   },
 
@@ -73,6 +74,7 @@ export default {
         .filter(notebook => notebook.id === notebookId)[0];
       Note.getAllNote({notebookId}).then((res) => {
         this.notes = res.data;
+        this.$emit('update:notes', this.notes)
       });
     },
   },
