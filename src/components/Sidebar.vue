@@ -8,7 +8,7 @@
       <router-link to="/notebooks" title="笔记本">
         <i class="iconfont icon-notebook"/>
       </router-link>
-      <router-link to="/trash" title="回收站">
+      <router-link to="/trash" title="废纸篓">
         <i class="iconfont icon-trash"/>
       </router-link>
       <div class="logout" @click="onLogout" title="退出登录">

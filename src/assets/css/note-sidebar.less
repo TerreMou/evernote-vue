@@ -1,0 +1,90 @@
+@bg: #fff;
+@theme: #fb80a7;
+@subFont: #878787;
+@border: #eaecef;
+@hr: #eaecef;
+
+
+.note-sidebar {
+  width: 290px;
+  border-right: 1px solid @border;
+  background-color: @bg;
+
+  header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px;
+
+    .note-title {
+      color: @subFont;
+      font-size: 21px;
+    }
+
+    .add-note {
+      font-size: 12px;
+      text-align: center;
+      background: @theme;
+      color: #fff;
+      border-radius: 4px;
+      padding: 4px 6px;
+
+      i {
+        margin-right: 4px;
+      }
+
+      &:hover, &:focus {
+        cursor: pointer;
+        background: darken(@theme, 10%);
+        border-color: darken(@theme, 10%);
+      }
+    }
+  }
+
+  main {
+
+    .menu {
+      display: flex;
+      color: @subFont;
+      padding: 8px 0;
+      margin: 0 16px;
+      border-bottom: 1px solid @hr;
+
+      div {
+        font-size: 12px;
+        flex: 1;
+      }
+
+    }
+
+    .note-info {
+      color: #444444;
+      li {
+        display: flex;
+        padding: 0 16px;
+        &:hover {
+          background-color: lighten(@theme, 22%);
+        }
+
+        span {
+          flex: 1;
+          padding: 8px 0;
+        }
+
+        .router-link-exact-active {
+          background-color: lighten(@theme, 15%);
+        }
+
+        .date {
+        }
+
+        .title {
+        }
+
+      }
+
+    }
+
+  }
+
+}
