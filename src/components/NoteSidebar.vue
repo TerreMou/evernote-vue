@@ -7,8 +7,11 @@
           我的笔记本1<i class="el-icon-arrow-down el-icon--right"></i>
         </span>
         <el-dropdown-menu slot="dropdown" class="el-dropdown-menu">
-          <el-dropdown-item v-for="notebook in notebooks" :key="notebook.id">{{ notebook.title }}</el-dropdown-item>
-          <el-dropdown-item divided command="trash" >废纸篓</el-dropdown-item>
+          <el-dropdown-item v-for="notebook in notebooks" :key="notebook.id"
+                            :command="notebook.id"
+          >{{ notebook.title }}
+          </el-dropdown-item>
+          <el-dropdown-item divided command="trash">废纸篓</el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>
       <span class="add-note"
@@ -20,21 +23,22 @@
         <div>标题</div>
       </div>
       <ul class="note-info">
-        <li><span class="date">3 分钟前</span><span class="title">note 1</span></li>
-        <li><span class="date">1 天前</span><span class="title">note 2</span></li>
-        <li><span class="date">30 天前</span><span class="title">note 3</span></li>
-        <li><span class="date">2021-12-17</span><span class="title">note 10</span></li>
+        <li v-for="note in notes">
+          <router-link :to="`/note?noteId=${note.id}`">
+            <span class="date">{{ note.updatedAtDisplay }}</span>
+            <span class="title">{{ note.title }}</span>
+          </router-link>
+        </li>
       </ul>
     </main>
-
-
   </div>
 
 </template>
 
 <script>
-import Notebook from '@/apis/notebookApis'
-import Bus from '@/helpers/bus'
+import Notebook from '@/apis/notebookApis';
+import Note from '@/apis/noteApis';
+import Bus from '@/helpers/bus';
 
 export default {
   data() {
@@ -42,20 +46,28 @@ export default {
       notebooks: [],
       notes: [],
       currentBook: {}
-    }
+    };
   },
 
   created() {
-    Notebook.getNotebookList().then((res)=>{
-      this.notebooks = res.data
-    })
+    Notebook.getNotebookList().then((res) => {
+      this.notebooks = res.data;
+    });
   },
 
   methods: {
     addNote() {
-      console.log("add note ...")
+      console.log('add note ...');
     },
-    handleCommand() {},
+    handleCommand(notebookId) {
+      if (notebookId === 'trash') {
+        return this.$router.push({path: '/trash'});
+      }
+      Note.getAllNote({notebookId}).then((res)=>{
+        console.log(res.data)
+        this.notes = res.data
+      })
+    },
   },
 
 };
@@ -77,6 +89,7 @@ export default {
 .el-dropdown-menu {
   .el-dropdown-menu__item {
     width: 200px;
+
     &:hover {
       background-color: #fb80a7;
       color: #fff;
