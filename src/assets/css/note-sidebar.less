@@ -9,6 +9,8 @@
   width: 290px;
   border-right: 1px solid @border;
   background-color: @bg;
+  overflow: auto;
+  &::-webkit-scrollbar { width: 0 }
 
   header {
     display: flex;
@@ -28,6 +30,7 @@
       color: #fff;
       border-radius: 4px;
       padding: 4px 6px;
+      white-space: nowrap;
 
       i {
         margin-right: 4px;
@@ -60,6 +63,7 @@
     .note-info {
       color: #444444;
       li {
+        font-size: 12px;
         a {
           display: flex;
           align-items: center;
