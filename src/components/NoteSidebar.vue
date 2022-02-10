@@ -2,9 +2,10 @@
 
   <div class="note-sidebar">
     <header>
-      <el-dropdown class="note-title" @command="handleCommand" placement="bottom-start">
+      <el-dropdown class="note-title" @command="handleCommand"
+                   trigger="click" placement="bottom-start">
         <span class="el-dropdown-link">
-          我的笔记本1<i class="el-icon-arrow-down el-icon--right"></i>
+          {{ currentBook.title }}<i class="el-icon-arrow-down el-icon--right"/>
         </span>
         <el-dropdown-menu slot="dropdown" class="el-dropdown-menu">
           <el-dropdown-item v-for="notebook in notebooks" :key="notebook.id"
@@ -24,7 +25,7 @@
       </div>
       <ul class="note-info">
         <li v-for="note in notes">
-          <router-link :to="`/note?noteId=${note.id}`">
+          <router-link :to="`/note?noteId=${note.id}&notebookId=${currentBook.id}`">
             <span class="date">{{ note.updatedAtDisplay }}</span>
             <span class="title">{{ note.title }}</span>
           </router-link>
@@ -52,6 +53,11 @@ export default {
   created() {
     Notebook.getNotebookList().then((res) => {
       this.notebooks = res.data;
+      this.currentBook = this.notebooks
+        .find(notebook => notebook.id === this.$route.query.notebookId - 0) || this.notebooks[0] || {};
+      return Note.getAllNote({notebookId: this.currentBook.id});
+    }).then(res => {
+      this.notes = res.data;
     });
   },
 
@@ -63,10 +69,11 @@ export default {
       if (notebookId === 'trash') {
         return this.$router.push({path: '/trash'});
       }
-      Note.getAllNote({notebookId}).then((res)=>{
-        console.log(res.data)
-        this.notes = res.data
-      })
+      this.currentBook = this.notebooks
+        .filter(notebook => notebook.id === notebookId)[0];
+      Note.getAllNote({notebookId}).then((res) => {
+        this.notes = res.data;
+      });
     },
   },
 
