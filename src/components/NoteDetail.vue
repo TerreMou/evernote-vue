@@ -8,6 +8,7 @@
           <div>
             <span>创建日期：{{currentNote.createdAtDisplay}}</span>
             <span>更新日期：{{currentNote.updatedAtDisplay}}</span>
+            <span>{{ statusText }}</span>
           </div>
          <div>
            <span class="el-icon-brush"/>
@@ -16,10 +17,16 @@
         </header>
         <main>
           <section class="note-title">
-            <input type="text" v-model="currentNote.title" placeholder="请输入标题">
+            <input type="text" placeholder="请输入标题"
+                   @input="updateNote"
+                   @keydown="statusText='保存中'"
+                   v-model="currentNote.title" >
           </section>
           <section class="editor">
-            <textarea v-show="true" v-model="currentNote.content" placeholder="请输入内容，支持 markdown 语法" />
+            <textarea v-show="true" placeholder="请输入内容，支持 markdown 语法"
+                      @input="updateNote"
+                      @keydown="statusText='保存中'"
+                      v-model="currentNote.content"/>
             <div class="preview markdown-body" v-show="false"/>
           </section>
         </main>
@@ -34,6 +41,8 @@
 import Auth from '@/apis/auth';
 import NoteSidebar from '@/components/NoteSidebar';
 import Bus from '@/helpers/bus'
+import _ from 'lodash'
+import Note from '@/apis/noteApis'
 
 export default {
   name: 'NoteDetail',
@@ -41,7 +50,8 @@ export default {
   data() {
     return {
       currentNote: {},
-      notes:[],
+      notes: [],
+      statusText: '',
     };
   },
 
@@ -54,6 +64,21 @@ export default {
     Bus.$once('update:notes', notes =>
       this.currentNote = notes.find(note =>
         note.id === this.$route.query.noteId -0) || {})
+  },
+
+  methods: {
+    updateNote: _.debounce(function() { // 300ms 后再执行该函数
+      const {id, title, content} = this.currentNote
+      Note.updateNote({noteId: id}, {title, content})
+        .then(res => {
+          console.log(res)
+          this.statusText = '保存成功'
+        })
+        .catch(err => {
+          console.log(err)
+          this.statusText = '保存出错'
+        })
+    }, 300),
   },
 
   beforeRouteUpdate(to, from, next) {
