@@ -12,7 +12,7 @@
           </div>
          <div>
            <span class="el-icon-brush"/>
-           <span class="el-icon-delete"/>
+           <span class="el-icon-delete" @click="deleteNote" />
          </div>
         </header>
         <main>
@@ -71,14 +71,24 @@ export default {
       const {id, title, content} = this.currentNote
       Note.updateNote({noteId: id}, {title, content})
         .then(res => {
-          console.log(res)
+          console.log(res.msg)
           this.statusText = '保存成功'
         })
         .catch(err => {
-          console.log(err)
+          console.log(err.msg)
           this.statusText = '保存出错'
         })
     }, 300),
+
+    deleteNote() {
+      Note.deleteNote({noteId: this.currentNote.id})
+        .then(res => {
+          this.$message.success(res.msg)
+          const index = this.notes.indexOf(this.currentNote)
+          this.notes.splice(index,1)
+          this.$router.replace({path:'/note'})
+        })
+    }
   },
 
   beforeRouteUpdate(to, from, next) {
