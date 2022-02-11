@@ -11,7 +11,7 @@
             <span>{{ statusText }}</span>
           </div>
          <div>
-           <span class="el-icon-brush"/>
+           <span class="el-icon-brush" @click="previewVisible = !previewVisible"/>
            <span class="el-icon-delete" @click="deleteNote" />
          </div>
         </header>
@@ -23,11 +23,12 @@
                    v-model="currentNote.title" >
           </section>
           <section class="editor">
-            <textarea v-show="true" placeholder="请输入内容，支持 markdown 语法"
+            <textarea v-show="!previewVisible" placeholder="请输入内容，支持 markdown 语法"
                       @input="updateNote"
                       @keydown="statusText='保存中'"
                       v-model="currentNote.content"/>
-            <div class="preview markdown-body" v-show="false"/>
+            <div class="preview markdown-body" v-show="previewVisible"
+                 v-html="contentPreview"/>
           </section>
         </main>
       </div>
@@ -43,6 +44,9 @@ import NoteSidebar from '@/components/NoteSidebar';
 import Bus from '@/helpers/bus'
 import _ from 'lodash'
 import Note from '@/apis/noteApis'
+import MarkdownIt from 'markdown-it'
+
+const md = new MarkdownIt()
 
 export default {
   name: 'NoteDetail',
@@ -52,7 +56,14 @@ export default {
       currentNote: {},
       notes: [],
       statusText: '',
+      previewVisible: false,
     };
+  },
+
+  computed: {
+    contentPreview() {
+      return md.render(this.currentNote.content || '')
+    }
   },
 
   created() {
@@ -63,7 +74,8 @@ export default {
     })
     Bus.$once('update:notes', notes =>
       this.currentNote = notes.find(note =>
-        note.id === this.$route.query.noteId -0) || {})
+        note.id === this.$route.query.noteId -0) || {}
+    )
   },
 
   methods: {
