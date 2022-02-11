@@ -25,10 +25,10 @@
       </div>
       <ul class="note-info">
         <li v-for="note in notes">
-          <router-link :to="`/note?noteId=${note.id}&notebookId=${currentBook.id}`">
-            <span class="date">{{ note.updatedAtDisplay }}</span>
-            <span class="title">{{ note.title }}</span>
-          </router-link>
+            <router-link :to="`/note?noteId=${note.id}&notebookId=${currentBook.id}`">
+              <span class="date">{{ note.updatedAtDisplay }}</span>
+              <span class="title">{{ note.title }}</span>
+            </router-link>
         </li>
       </ul>
     </main>
@@ -53,12 +53,12 @@ export default {
   created() {
     Notebook.getNotebookList().then((res) => {
       this.notebooks = res.data;
-      this.currentBook = this.notebooks
-        .find(notebook => notebook.id === this.$route.query.notebookId - 0) || this.notebooks[0] || {};
+      this.currentBook = this.findCurrentBook(this.notebooks)
       return Note.getAllNote({notebookId: this.currentBook.id});
     }).then(res => {
       this.notes = res.data;
       this.$emit('update:notes', this.notes)
+      Bus.$emit('update:notes', this.notes)
     });
   },
 
@@ -66,6 +66,11 @@ export default {
     addNote() {
       console.log('add note ...');
     },
+
+    findCurrentBook(notebooks) {
+      return notebooks.find(book => book.id === this.$route.query.notebookId -0) || notebooks[0] || {}
+    },
+
     handleCommand(notebookId) {
       if (notebookId === 'trash') {
         return this.$router.push({path: '/trash'});

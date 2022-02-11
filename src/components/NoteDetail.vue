@@ -3,7 +3,6 @@
     <NoteSidebar @update:notes="notes=$event" />
     <div class="note-detail">
       <div class="unselected" v-show="!currentNote.id">请选择笔记</div>
-
       <div class="selected" v-show="currentNote.id">
         <header>
           <div>
@@ -34,6 +33,7 @@
 <script>
 import Auth from '@/apis/auth';
 import NoteSidebar from '@/components/NoteSidebar';
+import Bus from '@/helpers/bus'
 
 export default {
   name: 'NoteDetail',
@@ -44,15 +44,21 @@ export default {
       notes:[],
     };
   },
+
   created() {
     Auth.getInfo().then(res => {
       if (!res.isLogin) {
         this.$router.push({path: '/login'});
       }
-    });
+    })
+    Bus.$once('update:notes', notes =>
+      this.currentNote = notes.find(note =>
+        note.id === this.$route.query.noteId -0) || {})
   },
+
   beforeRouteUpdate(to, from, next) {
-    this.currentNote = this.notes.find(note=>note.id === to.query.noteId-0) || {}
+    this.currentNote = this.notes.find(note =>
+      note.id === to.query.noteId-0) || {}
     next()
   },
 
