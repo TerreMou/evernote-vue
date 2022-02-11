@@ -64,7 +64,11 @@ export default {
 
   methods: {
     addNote() {
-      console.log('add note ...');
+      Note.addNote({notebookId: this.currentBook.id})
+        .then(res => {
+          this.$message.success(res.msg)
+          this.notes.unshift(res.data)
+        })
     },
 
     findCurrentBook(notebooks) {
