@@ -65,7 +65,7 @@
 
 <script>
 import Auth from '@/apis/auth';
-import Notebook from '@/apis/notebookApis';
+import {mapActions, mapGetters} from 'vuex'
 import Button from '@/components/Button';
 import Dialog from '@/components/Dialog';
 
@@ -80,7 +80,6 @@ export default {
       bool1: false,
       bool2: false,
       bool3: false,
-      notebooks: [],
       nbTitle: '',
       nbTitleEdit: '',
       nb: {},
@@ -93,12 +92,21 @@ export default {
         this.$router.push({path: '/login'});
       }
     });
-    Notebook.getNotebookList().then((res) => {
-      this.notebooks = res.data;
-    });
+    this.getNotebooks()
+  },
+
+  computed: {
+    ...mapGetters(['notebooks'])
   },
 
   methods: {
+    ...mapActions([
+      'getNotebooks',
+      'addNotebook',
+      'updateNotebook',
+      'deleteNotebook',
+    ]),
+
     showCreateDialog() {
       this.bool1 = !this.bool1;
     },
@@ -121,24 +129,13 @@ export default {
         this.nbTitle = '';
         return;
       }
-      Notebook.addNotebook({title: this.nbTitle}).then(res => {
-        this.notebooks.unshift(res.data);
-        this.$message.success(res.msg)
-      }).catch(err => this.$message.error(err.msg));
-      this.nbTitle = '';
+      this.addNotebook({title: this.nbTitle})
     },
     onEdit() {
-      Notebook.updateNotebook(this.nb.id, {title: this.nbTitleEdit}).then(res => {
-        this.nb.title = this.nbTitleEdit;
-        this.$message.success(res.msg);
-      }).catch(err => this.$message.error(err.msg));
+      this.updateNotebook({notebookId: this.nb.id, title: this.nbTitleEdit})
     },
     onDelete() {
-      Notebook.deleteNotebook(this.nb.id).then(res => {
-        const index = this.notebooks.indexOf(this.nb);
-        this.notebooks.splice(index, 1);
-        this.$message.success(res.msg);
-      });
+      this.deleteNotebook({notebookId: this.nb.id})
     }
   },
 };
