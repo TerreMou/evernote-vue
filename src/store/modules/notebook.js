@@ -11,7 +11,7 @@ const getters = {
   currentBook: state => {
     if (!Array.isArray(state.notebooks)) return {};
     if (!state.currentBookId) return state.notebooks[0] || {};
-    return state.notebooks.find(notebook => notebook.id === state.currentBookId) || {};
+    return state.notebooks.find(notebook => notebook.id === state.currentBookId-0) || {};
   }
 };
 
@@ -25,16 +25,16 @@ const mutations = {
   },
 
   updateNotebook(state, payload) {
-    const notebook = state.notebooks.find(notebook => notebook.id === payload.notebookId) || {};
+    const notebook = state.notebooks.find(notebook => notebook.id === payload.notebookId-0) || {};
     notebook.title = payload.title;
   },
 
   deleteNotebook(state, payload) {
-    state.notebooks = state.notebooks.filter(notebook => notebook.id !== payload.notebookId);
+    state.notebooks = state.notebooks.filter(notebook => notebook.id !== payload.notebookId-0);
   },
 
   setCurrentBook(state, payload) {
-    state.currentBookId = payload.currentBookId;
+    state.currentBookId = payload.currentBookId-0;
   }
 
 };

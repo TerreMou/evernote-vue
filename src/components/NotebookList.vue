@@ -64,7 +64,7 @@
 </template>
 
 <script>
-import {mapState, mapActions, mapGetters} from 'vuex'
+import {mapActions, mapGetters} from 'vuex'
 import Button from '@/components/Button';
 import Dialog from '@/components/Dialog';
 

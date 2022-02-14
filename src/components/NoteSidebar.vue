@@ -91,7 +91,6 @@ export default {
 };
 </script>
 
-
 <style lang="less" scoped>
 @import url(../assets/css/note-sidebar.less);
 
