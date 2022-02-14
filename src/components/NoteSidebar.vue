@@ -16,7 +16,7 @@
         </el-dropdown-menu>
       </el-dropdown>
       <span class="add-note"
-            @click="addNote"><i class="el-icon-edit"/> 添加笔记</span>
+            @click="onAddNote"><i class="el-icon-edit"/> 添加笔记</span>
     </header>
     <main>
       <div class="menu">
@@ -37,54 +37,45 @@
 </template>
 
 <script>
-import Notebook from '@/apis/notebookApis';
-import Note from '@/apis/noteApis';
-import Bus from '@/helpers/bus';
+import {mapGetters, mapActions} from 'vuex';
 
 export default {
-  data() {
-    return {
-      notebooks: [],
-      notes: [],
-      currentBook: {}
-    };
+  computed: {
+    ...mapGetters([
+      'notebooks',
+      'notes',
+      'currentBook',
+    ])
   },
 
   created() {
-    Notebook.getNotebookList().then((res) => {
-      this.notebooks = res.data;
-      this.currentBook = this.findCurrentBook(this.notebooks)
-      return Note.getAllNote({notebookId: this.currentBook.id});
-    }).then(res => {
-      this.notes = res.data;
-      this.$emit('update:notes', this.notes)
-      Bus.$emit('update:notes', this.notes)
-    });
+    this.getNotebooks().then(()=>{
+      this.$store.commit('setCurrentBook',
+        {currentBookId: this.$route.query.notebookId})
+      return this.getNotes({notebookId: this.currentBook.id})
+    }).then(() => {
+      this.$store.commit('setCurrentNote',
+        {currentNoteId: this.$route.query.noteId})
+    })
   },
 
   methods: {
-    addNote() {
-      Note.addNote({notebookId: this.currentBook.id})
-        .then(res => {
-          this.$message.success(res.msg)
-          this.notes.unshift(res.data)
-        })
-    },
+    ...mapActions([
+      'getNotebooks',
+      'getNotes',
+      'addNote'
+    ]),
 
-    findCurrentBook(notebooks) {
-      return notebooks.find(book => book.id === this.$route.query.notebookId -0) || notebooks[0] || {}
+    onAddNote() {
+      this.addNote({notebookId: this.currentBook.id})
     },
 
     handleCommand(notebookId) {
       if (notebookId === 'trash') {
         return this.$router.push({path: '/trash'});
       }
-      this.currentBook = this.notebooks
-        .filter(notebook => notebook.id === notebookId)[0];
-      Note.getAllNote({notebookId}).then((res) => {
-        this.notes = res.data;
-        this.$emit('update:notes', this.notes)
-      });
+      this.$store.commit('setCurrentBook', {currentBookId: notebookId})
+      this.getNotes({notebookId})
     },
   },
 

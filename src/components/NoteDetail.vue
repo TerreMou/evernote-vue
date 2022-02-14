@@ -12,19 +12,19 @@
           </div>
          <div>
            <span class="el-icon-brush" @click="previewVisible = !previewVisible"/>
-           <span class="el-icon-delete" @click="deleteNote" />
+           <span class="el-icon-delete" @click="onDeleteNote" />
          </div>
         </header>
         <main>
           <section class="note-title">
             <input type="text" placeholder="请输入标题"
-                   @input="updateNote"
+                   @input="onUpdateNote"
                    @keydown="statusText='保存中'"
                    v-model="currentNote.title" >
           </section>
           <section class="editor">
             <textarea v-show="!previewVisible" placeholder="请输入内容，支持 markdown 语法"
-                      @input="updateNote"
+                      @input="onUpdateNote"
                       @keydown="statusText='保存中'"
                       v-model="currentNote.content"/>
             <div class="preview markdown-body" v-show="previewVisible"
@@ -41,26 +41,29 @@
 <script>
 import Auth from '@/apis/auth';
 import NoteSidebar from '@/components/NoteSidebar';
-import Bus from '@/helpers/bus'
 import _ from 'lodash'
-import Note from '@/apis/noteApis'
 import MarkdownIt from 'markdown-it'
+import {mapActions, mapGetters} from 'vuex';
 
 const md = new MarkdownIt()
 
 export default {
   name: 'NoteDetail',
   components: {NoteSidebar},
+
   data() {
     return {
-      currentNote: {},
-      notes: [],
       statusText: '',
       previewVisible: false,
     };
   },
 
   computed: {
+    ...mapGetters([
+      'notes',
+      'currentNote'
+    ]),
+
     contentPreview() {
       return md.render(this.currentNote.content || '')
     }
@@ -72,40 +75,36 @@ export default {
         this.$router.push({path: '/login'});
       }
     })
-    Bus.$once('update:notes', notes =>
-      this.currentNote = notes.find(note =>
-        note.id === this.$route.query.noteId -0) || {}
-    )
   },
 
   methods: {
-    updateNote: _.debounce(function() { // 300ms 后再执行该函数
+    ...mapActions([
+      'updateNote',
+      'deleteNote'
+    ]),
+
+
+    onUpdateNote: _.debounce(function() { // 300ms 后再执行该函数
       const {id, title, content} = this.currentNote
-      Note.updateNote({noteId: id}, {title, content})
-        .then(res => {
-          console.log(res.msg)
+      this.updateNote({noteId: id, title, content})
+        .then(() => {
           this.statusText = '保存成功'
         })
-        .catch(err => {
-          console.log(err.msg)
+        .catch(() => {
           this.statusText = '保存出错'
         })
-    }, 300),
+    }, 1000),
 
-    deleteNote() {
-      Note.deleteNote({noteId: this.currentNote.id})
-        .then(res => {
-          this.$message.success(res.msg)
-          const index = this.notes.indexOf(this.currentNote)
-          this.notes.splice(index,1)
+    onDeleteNote() {
+      this.deleteNote({noteId: this.currentNote.id})
+        .then(() => {
           this.$router.replace({path:'/note'})
         })
     }
   },
 
   beforeRouteUpdate(to, from, next) {
-    this.currentNote = this.notes.find(note =>
-      note.id === to.query.noteId-0) || {}
+    this.$store.commit('setCurrentNote', {currentNoteId: to.query.noteId-0})
     next()
   },
 

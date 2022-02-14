@@ -33,8 +33,8 @@ const mutations = {
     state.notebooks = state.notebooks.filter(notebook => notebook.id !== payload.notebookId-0);
   },
 
-  setCurrentBook(state, payload) {
-    state.currentBookId = payload.currentBookId-0;
+  setCurrentBook(state, {currentBookId}) {
+    state.currentBookId = currentBookId-0;
   }
 
 };
