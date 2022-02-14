@@ -64,8 +64,7 @@
 </template>
 
 <script>
-import Auth from '@/apis/auth';
-import {mapActions, mapGetters} from 'vuex'
+import {mapState, mapActions, mapGetters} from 'vuex'
 import Button from '@/components/Button';
 import Dialog from '@/components/Dialog';
 
@@ -87,11 +86,7 @@ export default {
   },
 
   created() {
-    Auth.getInfo().then(res => {
-      if (!res.isLogin) {
-        this.$router.push({path: '/login'});
-      }
-    });
+    this.checkLogin({path: '/login'})
     this.getNotebooks()
   },
 
@@ -105,6 +100,7 @@ export default {
       'addNotebook',
       'updateNotebook',
       'deleteNotebook',
+      'checkLogin'
     ]),
 
     showCreateDialog() {

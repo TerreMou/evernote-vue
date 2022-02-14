@@ -60,10 +60,7 @@
 
 <script>
 import Button from '@/components/Button';
-import Auth from '@/apis/auth';
-import Bus from '@/helpers/bus';
-
-Auth.getInfo().then(data => console.log(data));
+import {mapActions} from 'vuex';
 
 export default {
   name: 'Login',
@@ -91,6 +88,11 @@ export default {
     };
   },
   methods: {
+    ...mapActions({
+      loginUser: 'login',
+      registerUser: 'register'
+    }),
+
     showLogin() {
       this.registerVisible = false;
       this.loginVisible = true;
@@ -106,31 +108,28 @@ export default {
       this.passwordIsError = !/^.{6,16}$/.test(password);
     },
     onRegister() {
-      Auth.register({
+      this.registerUser({
         username: this.register.username,
         password: this.register.password
       }).then(() => {
         this.register.isError = false;
-        Bus.$emit('update:userInfo', {username: this.register.username});
         this.$router.push({path: '/notebooks'});
       }).catch(data => {
         this.register.isError = true;
         this.register.notice = data.msg;
-      });
+      })
     },
     onLogin() {
-      Auth.login({
+      this.loginUser({
         username: this.login.username,
         password: this.login.password
       }).then(() => {
-          this.login.isError = false;
-          Bus.$emit('update:userInfo', {username: this.login.username});
-          this.$router.push({path: '/notebooks'});
-        }
-      ).catch(data => {
+        this.login.isError = false;
+        this.$router.push({path: '/notebooks'});
+      }).catch(data => {
         this.login.isError = true;
         this.login.notice = data.msg;
-      });
+      })
     },
   },
 };
