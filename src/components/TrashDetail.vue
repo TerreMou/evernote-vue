@@ -71,6 +71,7 @@ export default {
 
   created() {
     this.$store.dispatch('checkLogin', {path:'/login'})
+    this.getNotebooks()
     this.getTrashNotes().then(() => {
       this.$store.commit('setCurrentTrashNote',
         {currentTrashNoteId: this.$route.query.noteId})
@@ -82,6 +83,7 @@ export default {
       'getTrashNotes',
       'revertTrashNote',
       'deleteTrashNote',
+      'getNotebooks'
     ]),
 
     onRevert() {
