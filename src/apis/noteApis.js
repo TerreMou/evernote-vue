@@ -1,5 +1,6 @@
 import request from '@/helpers/request';
 import {beautifyDate} from '@/helpers/beautifyDate';
+import {sortByDate} from '@/helpers/sortByDate';
 
 const URL = {
   GET: '/notes/from/:notebookId',
@@ -15,11 +16,7 @@ export default {
     return new Promise((resolve, reject) => {
       request(URL.GET.replace(':notebookId', notebookId))
         .then(res => {
-          res.data.sort((a, b) => a.updatedAt < b.updatedAt ? 1 : -1);
-          res.data.forEach(note => {
-            note.createdAtDisplay = beautifyDate(note.createdAt);
-            note.updatedAtDisplay = beautifyDate(note.updatedAt);
-          });
+          sortByDate(res.data)
           resolve(res);
         }).catch(err => reject(err));
     });
