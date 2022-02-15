@@ -50,49 +50,20 @@
 
 <script>
 import MarkdownIt from 'markdown-it'
+import {mapActions, mapGetters} from 'vuex';
 
 const md = new MarkdownIt()
 
 export default {
   name: 'TrashDetail',
 
-  data() {
-    return {
-      trashNotes: [
-        {
-          id:1,
-          title: 'my note',
-          content: '## hello world',
-          createdAtDisplay: '2 hours ago',
-          updatedAtDisplay: 'just now'
-        },
-        {
-          id:2,
-          title: 'my note',
-          content: '## hello world',
-          createdAtDisplay: '2 hours ago',
-          updatedAtDisplay: 'just now'
-        },
-        {
-          id:3,
-          title: 'my note',
-          content: '## hello world',
-          createdAtDisplay: '2 hours ago',
-          updatedAtDisplay: 'just now'
-        },
-      ],
-      currentTrashNote: {
-        id:1,
-        title: 'my note',
-        content: '## hello world',
-        createdAtDisplay: '2 hours ago',
-        updatedAtDisplay: 'just now'
-      },
-      belongTo: 'my notebook',
-    };
-  },
-
   computed: {
+    ...mapGetters([
+      'trashNotes',
+      'currentTrashNote',
+      'belongTo'
+    ]),
+
     compiledMarkdown() {
       return md.render(this.currentTrashNote.content || '')
     }
@@ -100,15 +71,34 @@ export default {
 
   created() {
     this.$store.dispatch('checkLogin', {path:'/login'})
+    this.getTrashNotes().then(() => {
+      this.$store.commit('setCurrentTrashNote',
+        {currentTrashNoteId: this.$route.query.noteId})
+    })
   },
 
   methods: {
+    ...mapActions([
+      'getTrashNotes',
+      'revertTrashNote',
+      'deleteTrashNote',
+    ]),
+
     onRevert() {
       console.log('revert')
+      this.revertTrashNote({noteId: this.currentTrashNote.id})
     },
+
     onDelete() {
       console.log('delete');
-    }
+      this.deleteTrashNote({noteId: this.currentTrashNote.id})
+    },
+  },
+
+  beforeRouteUpdate(to, from, next) {
+    this.$store.commit('setCurrentTrashNote',
+      {currentTrashNoteId: to.query.noteId})
+    next()
   }
 
 };
