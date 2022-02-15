@@ -45,6 +45,7 @@ export default {
       'notebooks',
       'notes',
       'currentBook',
+      'currentNote'
     ])
   },
 
@@ -54,9 +55,16 @@ export default {
         {currentBookId: this.$route.query.notebookId})
       return this.getNotes({notebookId: this.currentBook.id})
     }).then(() => {
-      this.$store.commit('setCurrentNote',
-        {currentNoteId: this.$route.query.noteId})
-    })
+        this.$store.commit('setCurrentNote', {currentNoteId: this.$route.query.noteId})
+        this.$router.replace({
+          path: '/note',
+          query: {
+            noteId: this.currentNote.id,
+            notebookId: this.currentBook.id
+          }
+        })
+      }
+    )
   },
 
   methods: {
@@ -75,7 +83,16 @@ export default {
         return this.$router.push({path: '/trash'});
       }
       this.$store.commit('setCurrentBook', {currentBookId: notebookId})
-      this.getNotes({notebookId})
+      this.getNotes({notebookId}).then(() => {
+        this.$store.commit('setCurrentNote', {})
+        this.$router.replace({
+          path: '/note',
+          query: {
+            noteId: this.currentNote.id,
+            notebookId: this.currentBook.id
+          }
+        })
+      })
     },
   },
 

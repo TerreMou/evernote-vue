@@ -34,7 +34,7 @@ const mutations = {
     state.notes = state.notes.filter(note => note.id !== noteId-0);
   },
 
-  setCurrentNote(state, {currentNoteId}) {
+  setCurrentNote(state, {currentNoteId} = {}) {
     state.currentNoteId = currentNoteId
   }
 
