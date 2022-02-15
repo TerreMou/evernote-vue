@@ -87,7 +87,7 @@ export default {
 
   created() {
     this.checkLogin({path: '/login'})
-    this.getNotebooks()
+    this.$store.dispatch('getNotebooks')
   },
 
   computed: {

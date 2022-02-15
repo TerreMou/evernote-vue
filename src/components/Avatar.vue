@@ -7,13 +7,13 @@ import {mapActions, mapGetters} from 'vuex';
 
 export default {
   created() {
-    this.setUser()
+    this.checkLogin()
   },
 
   methods: {
-    ...mapActions({
-      'setUser': 'checkLogin'
-    })
+    ...mapActions([
+      'checkLogin'
+      ])
   },
 
   computed: {
