@@ -1,7 +1,7 @@
 <template>
   <div id="note">
     <NoteSidebar @update:notes="notes=$event" />
-    <div class="note-detail">
+    <div class="detail">
       <div class="unselected" v-show="!currentNote.id">请选择笔记</div>
       <div class="selected" v-show="currentNote.id">
         <header>
@@ -16,7 +16,7 @@
          </div>
         </header>
         <main>
-          <section class="note-title">
+          <section class="title">
             <input type="text" placeholder="请输入标题"
                    @input="onUpdateNote"
                    @keydown="statusText='保存中'"
@@ -32,9 +32,7 @@
           </section>
         </main>
       </div>
-
     </div>
-
   </div>
 </template>
 
