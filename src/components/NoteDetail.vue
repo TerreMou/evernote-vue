@@ -11,7 +11,8 @@
             <span>{{ statusText }}</span>
           </div>
          <div>
-           <span class="el-icon-brush" @click="previewVisible = !previewVisible"/>
+           <span :class="previewVisible? 'el-icon-edit-outline' : 'el-icon-view'"
+                 @click="previewVisible = !previewVisible"/>
            <span class="el-icon-delete" @click="onDeleteNote" />
          </div>
         </header>
