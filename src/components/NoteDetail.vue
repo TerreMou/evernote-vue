@@ -79,6 +79,7 @@ export default {
 
 
     onUpdateNote: _.debounce(function() { // 300ms 后再执行该函数
+      if(!this.currentNote.id) return
       const {id, title, content} = this.currentNote
       this.updateNote({noteId: id, title, content})
         .then(() => {

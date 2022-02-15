@@ -84,7 +84,7 @@ export default {
       }
       this.$store.commit('setCurrentBook', {currentBookId: notebookId})
       this.getNotes({notebookId}).then(() => {
-        this.$store.commit('setCurrentNote', {})
+        this.$store.commit('setCurrentNote')
         this.$router.replace({
           path: '/note',
           query: {

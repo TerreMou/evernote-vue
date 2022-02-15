@@ -75,6 +75,10 @@ export default {
     this.getTrashNotes().then(() => {
       this.$store.commit('setCurrentTrashNote',
         {currentTrashNoteId: this.$route.query.noteId})
+      this.$router.replace({
+        path: '/trash',
+        query: {noteId: this.currentTrashNote.id}
+      })
     })
   },
 
@@ -87,13 +91,25 @@ export default {
     ]),
 
     onRevert() {
-      console.log('revert')
       this.revertTrashNote({noteId: this.currentTrashNote.id})
+        .then(() => {
+          this.$store.commit('setCurrentTrashNote')
+          this.$router.replace({
+            path: '/trash',
+            query: {noteId: this.currentTrashNote.id}
+          })
+          })
     },
 
     onDelete() {
-      console.log('delete');
       this.deleteTrashNote({noteId: this.currentTrashNote.id})
+        .then(() => {
+          this.$store.commit('setCurrentTrashNote')
+          this.$router.replace({
+            path: '/trash',
+            query: {noteId: this.currentTrashNote.id}
+          })
+        })
     },
   },
 

@@ -26,7 +26,7 @@ const mutations = {
     state.trashNotes = trashNotes
   },
 
-  setCurrentTrashNote(state, {currentTrashNoteId}) {
+  setCurrentTrashNote(state, {currentTrashNoteId}={}) {
     state.currentTrashNoteId = currentTrashNoteId
   },
 
