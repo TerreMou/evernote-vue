@@ -2,7 +2,8 @@
   <div id="note">
     <NoteSidebar @update:notes="notes=$event" />
     <div class="detail">
-      <div class="unselected" v-show="!currentNote.id">请选择笔记</div>
+      <div class="unselected" v-show="!currentBook.id">请创建笔记本后</div>
+      <div class="unselected" v-show="!currentNote.id">选择或创建笔记</div>
       <div class="selected" v-show="currentNote.id">
         <header>
           <div>
@@ -59,7 +60,8 @@ export default {
   computed: {
     ...mapGetters([
       'notes',
-      'currentNote'
+      'currentNote',
+      'currentBook'
     ]),
 
     contentPreview() {

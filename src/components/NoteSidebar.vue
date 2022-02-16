@@ -3,7 +3,8 @@
   <div class="note-sidebar">
     <header>
       <el-dropdown class="note-title" @command="handleCommand"
-                   trigger="click" placement="bottom-start">
+                   trigger="click" placement="bottom-start"
+                   v-if="currentBook.id">
         <span class="el-dropdown-link">
           {{ currentBook.title }}<i class="el-icon-arrow-down el-icon--right"/>
         </span>
@@ -15,7 +16,9 @@
           <el-dropdown-item divided command="trash">废纸篓</el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>
+      <span v-if="!currentBook.id" class="note-title">暂无笔记本</span>
       <span class="add-note"
+            v-if="currentBook.id"
             @click="onAddNote"><i class="el-icon-edit"/> 添加笔记</span>
     </header>
     <main>
@@ -25,10 +28,10 @@
       </div>
       <ul class="note-info">
         <li v-for="note in notes">
-            <router-link :to="`/note?noteId=${note.id}&notebookId=${currentBook.id}`">
-              <span class="date">{{ note.updatedAtDisplay }}</span>
-              <span class="title">{{ note.title }}</span>
-            </router-link>
+          <router-link :to="`/note?noteId=${note.id}&notebookId=${currentBook.id}`">
+            <span class="date">{{ note.updatedAtDisplay }}</span>
+            <span class="title">{{ note.title }}</span>
+          </router-link>
         </li>
       </ul>
     </main>
@@ -50,21 +53,21 @@ export default {
   },
 
   created() {
-    this.getNotebooks().then(()=>{
+    this.getNotebooks().then(() => {
       this.$store.commit('setCurrentBook',
-        {currentBookId: this.$route.query.notebookId})
-      return this.getNotes({notebookId: this.currentBook.id})
+        {currentBookId: this.$route.query.notebookId});
+      if(this.currentBook.id) {return this.getNotes({notebookId: this.currentBook.id})}
     }).then(() => {
-        this.$store.commit('setCurrentNote', {currentNoteId: this.$route.query.noteId})
+        this.$store.commit('setCurrentNote', {currentNoteId: this.$route.query.noteId});
         this.$router.replace({
           path: '/note',
           query: {
             noteId: this.currentNote.id,
             notebookId: this.currentBook.id
           }
-        })
+        });
       }
-    )
+    );
   },
 
   methods: {
@@ -75,24 +78,24 @@ export default {
     ]),
 
     onAddNote() {
-      this.addNote({notebookId: this.currentBook.id})
+      this.addNote({notebookId: this.currentBook.id});
     },
 
     handleCommand(notebookId) {
       if (notebookId === 'trash') {
         return this.$router.push({path: '/trash'});
       }
-      this.$store.commit('setCurrentBook', {currentBookId: notebookId})
+      this.$store.commit('setCurrentBook', {currentBookId: notebookId});
       this.getNotes({notebookId}).then(() => {
-        this.$store.commit('setCurrentNote')
+        this.$store.commit('setCurrentNote');
         this.$router.replace({
           path: '/note',
           query: {
             noteId: this.currentNote.id,
             notebookId: this.currentBook.id
           }
-        })
-      })
+        });
+      });
     },
   },
 
